@@ -38,7 +38,7 @@ jobs:
         id: get_datetime
         run: |
           datetime=$(date +"%Y%m%d%H%M%S")
-          echo "name=version::$datetime" >> $GITHUB_OUTPUT
+          echo "VERSION=$datetime" >> $GITHUB_OUTPUT
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
@@ -50,11 +50,11 @@ jobs:
 #      - name: Build JVM Docker image
 #        working-directory: CalorieTrackerBackend
 #        run: |
-#          docker build -f src/main/docker/Dockerfile.jvm -t ghcr.io/simon-b64/calorie-tracker-backend-jvm:${{ steps.get_datetime.outputs.version }} -t ghcr.io/simon-b64/calorie-tracker-backend-jvm:latest .
+#          docker build -f src/main/docker/Dockerfile.jvm -t ghcr.io/simon-b64/calorie-tracker-backend-jvm:$VERSION -t ghcr.io/simon-b64/calorie-tracker-backend-jvm:latest .
 #          docker push ghcr.io/simon-b64/calorie-tracker-backend-jvm --all-tags
 
       - name: Build Native Docker image
         working-directory: CalorieTrackerBackend
         run: |
-          docker build -f src/main/docker/Dockerfile.native -t ghcr.io/simon-b64/calorie-tracker-backend-native:${{ steps.get_datetime.outputs.version }} -t ghcr.io/simon-b64/calorie-tracker-backend-native:latest .
+          docker build -f src/main/docker/Dockerfile.native -t ghcr.io/simon-b64/calorie-tracker-backend-native:$VERSION -t ghcr.io/simon-b64/calorie-tracker-backend-native:latest .
           docker push ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-native --all-tags
