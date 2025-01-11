@@ -34,24 +34,18 @@ jobs:
         working-directory: CalorieTrackerBackend
         run: ./gradlew build
 
-      - name: Extract version number
-        id: extract_version
-        working-directory: CalorieTrackerBackend
-        run: echo "::set-output name=version::$(./gradlew properties -q | grep '^version:' | awk '{print $2}')"
-
-      - name: Bump version number for release
-        id: bump_version
+      - name: Get current datetime for version
+        id: get_datetime
         run: |
-          old_version=${{ steps.extract_version.outputs.version }}
-          new_version=$(echo "$old_version" | awk -F. '{$NF += 1; print $1 "." $2 "." $NF}')
-          echo "::set-output name=new_version::$new_version"
+          datetime=$(date +"%Y%m%d%H%M%S")
+          echo "::set-output name=version::$datetime"
 
       - name: Create GitHub release
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ steps.bump_version.outputs.new_version }}
-          release_name: Release ${{ steps.bump_version.outputs.new_version }}
+          tag_name: ${{ steps.get_datetime.outputs.version }}
+          release_name: Release ${{ steps.get_datetime.outputs.version }}
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -74,11 +68,11 @@ jobs:
       - name: Build JVM Docker image
         working-directory: CalorieTrackerBackend
         run: |
-          docker build -f src/main/docker/Dockerfile.jvm -t ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-jvm:${{ steps.bump_version.outputs.new_version }} .
-          docker push ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-jvm:${{ steps.bump_version.outputs.new_version }}
+          docker build -f src/main/docker/Dockerfile.jvm -t ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-jvm:${{ steps.get_datetime.outputs.version }} .
+          docker push ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-jvm:${{ steps.get_datetime.outputs.version }}
 
       - name: Build Native Docker image
         working-directory: CalorieTrackerBackend
         run: |
-          docker build -f src/main/docker/Dockerfile.native -t ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-native:${{ steps.bump_version.outputs.new_version }} .
-          docker push ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-native:${{ steps.bump_version.outputs.new_version }}
+          docker build -f src/main/docker/Dockerfile.native -t ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-native:${{ steps.get_datetime.outputs.version }} .
+          docker push ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-native:${{ steps.get_datetime.outputs.version }}
