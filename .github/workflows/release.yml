@@ -47,14 +47,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build JVM Docker image
-        working-directory: CalorieTrackerBackend
-        run: |
-          docker build -f src/main/docker/Dockerfile.jvm -t ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-jvm:${{ steps.get_datetime.outputs.version }} .
-          docker push ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-jvm:${{ steps.get_datetime.outputs.version }}
+#      - name: Build JVM Docker image
+#        working-directory: CalorieTrackerBackend
+#        run: |
+#          docker build -f src/main/docker/Dockerfile.jvm -t ghcr.io/simon-b64/calorie-tracker-backend-jvm:${{ steps.get_datetime.outputs.version }} -t ghcr.io/simon-b64/calorie-tracker-backend-jvm:latest .
+#          docker push ghcr.io/simon-b64/calorie-tracker-backend-jvm --all-tags
 
       - name: Build Native Docker image
         working-directory: CalorieTrackerBackend
         run: |
-          docker build -f src/main/docker/Dockerfile.native -t ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-native:${{ steps.get_datetime.outputs.version }} .
-          docker push ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-native:${{ steps.get_datetime.outputs.version }}
+          docker build -f src/main/docker/Dockerfile.native -t ghcr.io/simon-b64/calorie-tracker-backend-native:${{ steps.get_datetime.outputs.version }} -t ghcr.io/simon-b64/calorie-tracker-backend-native:latest .
+          docker push ghcr.io/${{ github.repository_owner }}/calorie-tracker-backend-native --all-tags
