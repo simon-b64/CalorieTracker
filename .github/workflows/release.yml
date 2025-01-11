@@ -39,7 +39,7 @@ jobs:
 
       - name: Build Quarkus project
         working-directory: CalorieTrackerBackend
-        run: ./gradlew build -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false
+        run: ./gradlew build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true -Dquarkus.package.jar.enabled=false
 
       - name: Get current datetime for version
         id: get_datetime
