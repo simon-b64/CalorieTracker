@@ -1,0 +1,44 @@
+quarkus:
+  http:
+    root-path: /api
+    non-application-root-path: /q
+    test-port: 8888
+  log:
+    category:
+      "at.avox":
+        level: INFO
+  management:
+    enabled: true
+    port: 9000
+  smallrye-openapi:
+    store-schema-directory: 'build/generated/'
+    operation-id-strategy: method
+    security-scheme: jwt
+  liquibase:
+    migrate-at-start: true
+    change-log: db/changelog.xml
+  oidc:
+    token:
+      allow-jwt-introspection: false
+      allow-opaque-token-introspection: false
+
+"%dev":
+  quarkus:
+    log:
+      category:
+        "at.avox":
+          level: DEBUG
+      level: INFO
+    http:
+      cors:
+        origins: /.*/
+    datasource:
+      devservices:
+        port: 32707
+        username: postgres
+        password: postgres
+    transaction-manager:
+      default-transaction-timeout: 25m
+    oidc:
+      client-id: local-backend
+#      auth-server-url:
