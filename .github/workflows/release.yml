@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    name: Build and Release Quarkus Backend
+    name: Build and Release Quarkus Backend with Native image
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -32,7 +32,7 @@ jobs:
 
       - name: Build Quarkus project
         working-directory: CalorieTrackerBackend
-        run: ./gradlew build
+        run: ./gradlew build -Dquarkus.native.enabled=true
 
       - name: Get current datetime for version
         id: get_datetime
@@ -47,6 +47,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+#     TODO: Would need to move to other build step
 #      - name: Build JVM Docker image
 #        working-directory: CalorieTrackerBackend
 #        run: |
