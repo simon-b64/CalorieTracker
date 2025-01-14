@@ -5,7 +5,7 @@ quarkus:
     test-port: 8888
   log:
     category:
-      "at.avox":
+      "at.avox.calorietracker.be":
         level: INFO
   management:
     enabled: true
