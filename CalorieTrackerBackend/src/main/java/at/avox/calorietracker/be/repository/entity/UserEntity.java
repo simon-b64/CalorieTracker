@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@Entity(name = "user")
+@Entity(name = "calorie-tracker-user")
 @Getter
 @Setter
 @NoArgsConstructor

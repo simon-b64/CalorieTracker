@@ -3,7 +3,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet author="simon-b64" id="2025-01-10_add_user_entity" objectQuotingStrategy="LEGACY">
-        <createTable tableName="user">
+        <createTable tableName="calorie-tracker-user">
             <column name="id" type="uuid">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
