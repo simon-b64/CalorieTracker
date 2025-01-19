@@ -2,6 +2,8 @@ package at.avox.calorietracker.be.service;
 
 import at.avox.calorietracker.be.repository.UserRepository;
 import at.avox.calorietracker.be.repository.entity.UserEntity;
+import at.avox.calorietracker.be.service.mapper.UserMapper;
+import at.avox.calorietracker.be.service.model.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.Objects;
 public class SecurityService {
     private final JsonWebToken jwt;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public String getSubject() {
         String subject = jwt.getClaim("sub");
@@ -26,14 +29,16 @@ public class SecurityService {
     }
 
     @Transactional
-    public UserEntity getOrCreateUserEntity() {
+    public User getOrCreateUserEntity() {
         var subject = getSubject();
-        return userRepository.findBySubject(subject).orElseGet(() -> {
-            var entity = new UserEntity();
-            entity.setSubject(subject);
-            entity.setName(jwt.getClaim("name"));
-            userRepository.persistAndFlush(entity);
-            return entity;
-        });
+        return userMapper.toModel(
+            userRepository.findBySubject(subject).orElseGet(() -> {
+                var entity = new UserEntity();
+                entity.setSubject(subject);
+                entity.setName(jwt.getClaim("name"));
+                userRepository.persistAndFlush(entity);
+                return entity;
+            })
+        );
     }
 }
