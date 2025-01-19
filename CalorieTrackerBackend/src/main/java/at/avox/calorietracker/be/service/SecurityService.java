@@ -2,8 +2,8 @@ package at.avox.calorietracker.be.service;
 
 import at.avox.calorietracker.be.repository.UserRepository;
 import at.avox.calorietracker.be.repository.entity.UserEntity;
-import com.fasterxml.jackson.core.PrettyPrinter;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
@@ -25,13 +25,13 @@ public class SecurityService {
         return subject;
     }
 
+    @Transactional
     public UserEntity getOrCreateUserEntity() {
         var subject = getSubject();
         return userRepository.findBySubject(subject).orElseGet(() -> {
             var entity = new UserEntity();
             entity.setSubject(subject);
-            // TODO: Read name from token
-            entity.setName("");
+            entity.setName(jwt.getClaim("name"));
             userRepository.persistAndFlush(entity);
             return entity;
         });
