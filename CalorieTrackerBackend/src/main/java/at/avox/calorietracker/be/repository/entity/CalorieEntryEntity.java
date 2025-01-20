@@ -6,26 +6,29 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity(name = "calorie_tracker_user")
+@Entity(name = "calorie_entry")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class CalorieEntryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String subject;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable=false)
+    private UserEntity user;
 
     @Column(nullable = false)
-    private String name;
+    private LocalDate date;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<CalorieEntryEntity> calorieEntries;
+    @Column(nullable = false)
+    private Integer amount;
+
+    private String note;
 }

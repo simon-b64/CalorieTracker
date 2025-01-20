@@ -42,3 +42,6 @@ quarkus:
     oidc:
       client-id: ${OIDC_CLIENT_ID}
       auth-server-url: ${OIDC_AUTH_SERVER_URL}
+    hibernate-orm:
+      log:
+        sql: false

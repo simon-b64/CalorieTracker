@@ -17,6 +17,6 @@ public class ExampleResource {
     @RolesAllowed("**")
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "Hello from Quarkus REST subject " + securityService.getOrCreateUserEntity().getName();
+        return "Hello from Quarkus REST subject " + securityService.getCurrentUser().getName();
     }
 }

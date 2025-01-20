@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -29,16 +30,30 @@ public class SecurityService {
     }
 
     @Transactional
-    public User getOrCreateUserEntity() {
+    public UUID getCurrentUserId() {
+        return getOrCreateUser(getSubject()).getId();
+    }
+
+    @Transactional
+    public User getCurrentUser() {
         var subject = getSubject();
         return userMapper.toModel(
-            userRepository.findBySubject(subject).orElseGet(() -> {
-                var entity = new UserEntity();
-                entity.setSubject(subject);
-                entity.setName(jwt.getClaim("name"));
-                userRepository.persistAndFlush(entity);
-                return entity;
-            })
+            getOrCreateUser(subject)
         );
+    }
+
+    @Transactional
+    public UserEntity getCurrentUserEntity() {
+        return getOrCreateUser(getSubject());
+    }
+
+    private UserEntity getOrCreateUser(String subject) {
+        return userRepository.findBySubject(subject).orElseGet(() -> {
+            var entity = new UserEntity();
+            entity.setSubject(subject);
+            entity.setName(jwt.getClaim("name"));
+            userRepository.persistAndFlush(entity);
+            return entity;
+        });
     }
 }

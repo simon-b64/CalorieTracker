@@ -1,0 +1,27 @@
+meta {
+  name: Delete entry
+  type: http
+  seq: 3
+}
+
+delete {
+  url: http://localhost:8080/api/v1/calorie-entry?id=30afec3d-52a3-442a-90a2-243851c98a6e
+  body: json
+  auth: bearer
+}
+
+params:query {
+  id: 30afec3d-52a3-442a-90a2-243851c98a6e
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "id": "30afec3d-52a3-442a-90a2-243851c98a6e",
+    "date": "2025-01-20",
+    "amount": 3000
+  }
+}
